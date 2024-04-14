@@ -19,9 +19,12 @@ GDPdata = GDPfile.iloc[4, 141:269]
 
 # Latest local situation of COVID-19
 COVIDfile = pd.read_csv('databases/local_situation_COVID-19.csv')
-# COVIDdata = COVIDfile.iloc[4, 141:269]
+COVIDdata = COVIDfile.iloc[4, 141:269]
 
-
+# Number of visitor arrival
+visitorFile = pd.read_csv('databases/number_of_visitor_arrival.csv')
+visitorData = visitorFile.iloc[1:265,1]
+print(visitorData)
 
 # plt.scatter(area, price)
 # plt.xlim(0, 1500)
