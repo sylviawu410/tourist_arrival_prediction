@@ -43,13 +43,16 @@ hotelData_seasonal = hotelData.resample('Q').mean()
 visitorData_seasonal = visitorData.resample('Q').mean()
 
 
-def create_df():
+
+def create_df(GDPdata_seasonal):
     indexGDP = pd.date_range('2002-01-01', periods=88, freq='Q')
     GDPdata_seasonal = pd.DataFrame(GDPdata_seasonal, columns=['GDP'])
     GDPdata_seasonal = GDPdata_seasonal.set_index(indexGDP)
 
-    combined_data = pd.concat([CPIdata_seasonal, pandemicData_seasonal, hotelData_seasonal, visitorData_seasonal, GDPdata_seasonal], axis=1)
+    combined_data = pd.concat([CPIdata_seasonal.rename("CPI"), pandemicData_seasonal, hotelData_seasonal.rename("Hotel Occupancy Rate"), visitorData_seasonal.rename("Visitor Arrival Number"), GDPdata_seasonal], axis=1)
     combined_data.to_csv('dataFrame.csv', index=False)
+
+create_df(GDPdata_seasonal)
 
 def check_dataset_shape():
     print(CPIdata.shape)
