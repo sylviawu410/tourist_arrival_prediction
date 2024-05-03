@@ -1,6 +1,5 @@
 # this file handle the datasets by creating the dataframe and output the correlation figures
 
-# Import python libraries
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -11,7 +10,7 @@ CPIfile = pd.read_csv('databases/monthlyCPI.csv')
 CPIdata = CPIfile.iloc[256:520, 2] 
 CPIdata = pd.to_numeric(CPIdata)
 
-# GDP (the data is already seasonal)
+# GDP (quarterly)
 GDPfile = pd.read_csv('databases/HKGDP.csv')
 GDPdata_seasonal = GDPfile.iloc[4, 181:269]
 GDPdata_seasonal = GDPfile.iloc[4, 181:269].values.reshape(-1, 1)
@@ -28,6 +27,9 @@ hotelData = hotelFile.iloc[0:264,1]
 visitorFile = pd.read_csv('databases/number_of_visitor_arrival.csv')
 visitorData = visitorFile.iloc[0:265,1]
 
+# Business Receipts Indices for tourism, convention and exhibition services
+BRIfile = pd.read_csv('databases/business_receipts_indices_for_tourism.csv')
+BRIdata = BRIfile.iloc[5:93,2]
 
 # Convert the monthly datasets to seasonal data
 index = pd.date_range('2002-01-01', periods=264, freq='M')
@@ -42,37 +44,44 @@ pandemicData_seasonal = pandemicData.resample('Q').mean()
 hotelData_seasonal = hotelData.resample('Q').mean()
 visitorData_seasonal = visitorData.resample('Q').mean()
 
+# datasets that are quarterly
+indexQuarter = pd.date_range('2002-01-01', periods=88, freq='Q')
 
+GDPdata_seasonal = pd.DataFrame(GDPdata_seasonal, columns=['GDP'])
+GDPdata_seasonal = GDPdata_seasonal.set_index(indexQuarter)
 
-def create_df(GDPdata_seasonal):
-    indexGDP = pd.date_range('2002-01-01', periods=88, freq='Q')
-    GDPdata_seasonal = pd.DataFrame(GDPdata_seasonal, columns=['GDP'])
-    GDPdata_seasonal = GDPdata_seasonal.set_index(indexGDP)
+BRIdata = pd.DataFrame(BRIdata.values[:len(indexQuarter)], columns=['Business Receipts Indices(Tourism)'])
+BRIdata = BRIdata.set_index(indexQuarter)
 
-    combined_data = pd.concat([CPIdata_seasonal.rename("CPI"), pandemicData_seasonal, hotelData_seasonal.rename("Hotel Occupancy Rate"), visitorData_seasonal.rename("Visitor Arrival Number"), GDPdata_seasonal], axis=1)
+def create_df():
+    combined_data = pd.concat([CPIdata_seasonal.rename("CPI"), pandemicData_seasonal, hotelData_seasonal.rename("Hotel Occupancy Rate"), visitorData_seasonal.rename("Visitor Arrival Number"), GDPdata_seasonal, BRIdata], axis=1)
     combined_data.to_csv('dataFrame.csv', index=False)
 
-create_df(GDPdata_seasonal)
+    correlation_matrix = combined_data.corr()
+    visitor_arrival_corr = correlation_matrix['Visitor Arrival Number']
+    print(visitor_arrival_corr)
 
-def check_dataset_shape():
+create_df()
+
+def check_datasets():
     print(CPIdata.shape)
     print(GDPdata_seasonal.shape)
     print(pandemicData.shape)
     print(hotelData.shape)
     print(visitorData.shape)
+    print(BRIdata.shape)
 
-    print("\n",CPIdata_seasonal.shape)
-    print(pandemicData_seasonal.shape)
-    print(hotelData_seasonal.shape)
-    print(visitorData_seasonal.shape)
-    print(GDPdata_seasonal.shape)
+    # print("\n",CPIdata_seasonal.shape)
+    # print(pandemicData_seasonal.shape)
+    # print(hotelData_seasonal.shape)
+    # print(visitorData_seasonal.shape)
+    # print(GDPdata_seasonal.shape)
 
-    print("\n",CPIdata_seasonal)
-    print(pandemicData_seasonal)
-    print(hotelData_seasonal)
-    print(visitorData_seasonal)
-    print(GDPdata_seasonal)
-
+    # print("\n",CPIdata_seasonal)
+    # print(pandemicData_seasonal)
+    # print(hotelData_seasonal)
+    # print(visitorData_seasonal)
+    # print(GDPdata_seasonal)
 
 # check correlations between different datasets and the visitor arrival 
 def correlation_CPI():
