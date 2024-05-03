@@ -22,17 +22,17 @@ y = data['Visitor Arrival Number']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 #Linear Regression model
-model = LinearRegression()
+model = LinearRegression(fit_intercept= True)
 model.fit(X_train, y_train)
 score = model.score(X_test, y_test)
 
 # Lasso Regression model
-lasso_model = Lasso(alpha=0.1)  # Set the alpha value (regularization strength)
+lasso_model = Lasso(alpha=0.9)  
 lasso_model.fit(X_train, y_train)
 lasso_score = lasso_model.score(X_test, y_test)
 
 # Ridge Regression model
-ridge_model = Ridge(alpha=0.1)  # Set the alpha value (regularization strength)
+ridge_model = Ridge(alpha=0.9)  
 ridge_model.fit(X_train, y_train)
 ridge_score = ridge_model.score(X_test, y_test)
 

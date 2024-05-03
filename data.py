@@ -1,5 +1,4 @@
 # this file handle the datasets by creating the dataframe and output the correlation figures
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -44,6 +43,13 @@ pandemicData_seasonal = pandemicData.resample('Q').mean()
 hotelData_seasonal = hotelData.resample('Q').mean()
 visitorData_seasonal = visitorData.resample('Q').mean()
 
+
+plt.scatter(BRIdata, visitorData_seasonal)
+plt.xlabel("BRI")
+plt.ylabel("Number of visitor arrival")
+ # plt.yscale('log') 
+plt.show()
+
 # datasets that are quarterly
 indexQuarter = pd.date_range('2002-01-01', periods=88, freq='Q')
 
@@ -70,18 +76,6 @@ def check_datasets():
     print(hotelData.shape)
     print(visitorData.shape)
     print(BRIdata.shape)
-
-    # print("\n",CPIdata_seasonal.shape)
-    # print(pandemicData_seasonal.shape)
-    # print(hotelData_seasonal.shape)
-    # print(visitorData_seasonal.shape)
-    # print(GDPdata_seasonal.shape)
-
-    # print("\n",CPIdata_seasonal)
-    # print(pandemicData_seasonal)
-    # print(hotelData_seasonal)
-    # print(visitorData_seasonal)
-    # print(GDPdata_seasonal)
 
 # check correlations between different datasets and the visitor arrival 
 def correlation_CPI():
@@ -113,4 +107,11 @@ def correlation_GDP():
     plt.xscale('log') 
     plt.show()
 
+def correlation_BRI():
+    plt.scatter(BRIdata, visitorData_seasonal)
+    plt.xlabel("BRI")
+    plt.ylabel("Number of visitor arrival")
+    plt.show()
+
+correlation_BRI()
 # pd.set_option('display.max_columns', None)
