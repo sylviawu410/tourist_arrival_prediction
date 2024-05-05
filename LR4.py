@@ -3,6 +3,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Lasso
 from sklearn.preprocessing import PolynomialFeatures, MinMaxScaler
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
+
 data = pd.read_csv('dataFrame.csv')
 
 start_date = pd.to_datetime('2002-01-01') 
@@ -38,13 +40,14 @@ lasso_model.fit(X_train_scaled, y_train)
 lasso_score = lasso_model.score(X_test_scaled, y_test)
 
 # details of LASSO
+y_pred = lasso_model.predict(X_test_scaled)
+mse = mean_squared_error(y_test, y_pred)
 print("Lasso Regression Coefficients:", lasso_model.coef_)
 print("Lasso Regression Intercept:", lasso_model.intercept_)
 print("Lasso Regression R^2 Score:", lasso_score)
-
+print("Mean Squared Error (MSE):", mse)
 
 def plotPolynomialGraph():
-    y_pred = lasso_model.predict(X_test_scaled)
     plt.scatter(y_test, y_pred)
     plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')
     plt.xlabel('Actual Number of Visitor Arrivals')
@@ -52,4 +55,4 @@ def plotPolynomialGraph():
     plt.title('Actual vs. Predicted Visitor Arrivals')
     plt.show()
 
-# plotPolynomialGraph()
+plotPolynomialGraph()
