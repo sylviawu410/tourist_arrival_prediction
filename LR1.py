@@ -32,7 +32,7 @@ print("\n","Coefficient:", model.coef_)
 print("Intercept:", model.intercept_)
 print("R^2 Score:", score)
 
-# Predict the target variable using the trained model
+
 y_pred = model.predict(X_test)
 
 def plotRegressionLine():

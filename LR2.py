@@ -17,7 +17,7 @@ data['Year'] = data['Date'].dt.year
 data['Month'] = data['Date'].dt.month
 data['Quarter'] = (data['Month'] - 1) // 3 + 1
 
-X = data[['CPI', 'Pandemics Cases', 'Hotel Occupancy Rate', 'GDP', 'Business Receipts Indices(Tourism)', 'Year', 'Quarter']]
+X = data[['CPI', 'Pandemics Cases', 'Hotel Occupancy Rate', 'GDP', 'BRI','CX stock price', 'Year', 'Quarter']]
 y = data['Visitor Arrival Number']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -27,17 +27,12 @@ model.fit(X_train, y_train)
 score = model.score(X_test, y_test)
 
 # Lasso Regression model
-lasso_model = Lasso(alpha=0.9)  
+lasso_model = Lasso(alpha=0.001)  
 lasso_model.fit(X_train, y_train)
 lasso_score = lasso_model.score(X_test, y_test)
 
-# Ridge Regression model
-ridge_model = Ridge(alpha=0.9)  
-ridge_model.fit(X_train, y_train)
-ridge_score = ridge_model.score(X_test, y_test)
-
 # Print the model's coefficient and intercept
-print("\n","Coefficient:", model.coef_)
+print("Coefficient:", model.coef_)
 print("Intercept:", model.intercept_)
 print("R^2 Score:", score)
 
@@ -45,12 +40,6 @@ print()
 print("Lasso Regression Coefficients:", lasso_model.coef_)
 print("Lasso Regression Intercept:", lasso_model.intercept_)
 print("Lasso Regression R^2 Score:", lasso_score)
-
-print()
-print("Ridge Regression Coefficients:", ridge_model.coef_)
-print("Ridge Regression Intercept:", ridge_model.intercept_)
-print("Ridge Regression R^2 Score:", ridge_score)
-
 
 # Predict the target variable using the trained model
 y_pred = model.predict(X_test)
@@ -62,4 +51,4 @@ def plotRegressionLine():
     plt.ylabel('Predicted Visitor Arrival Number')
     plt.title('Regression Model: Actual vs. Predicted')
     plt.show()
-plotRegressionLine()
+# plotRegressionLine()
